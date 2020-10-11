@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Data.ViewModel.ReportModel>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            var f = document.getElementById("FirstYear_List");
+            var firstYear = f.options[f.selectedIndex].text;
+            var s = document.getElementById("SecondYear_List");
+            var secondYear = s.options[s.selectedIndex].text;
+            $("#States_SelectedList").change(function (e) {
+                var val = $(this).val();
+                $("#reportPartial").load("/Report/ReportGrid?stateId=" + val + "&firstYear=" + firstYear + "&secondYear=" + secondYear);
+            });
+        });
+    </script>
+}
+<h2>Report</h2>
+@{
+    ViewBag.Title = "Report";
+}
+<div class="col-md-3"></div>
+<div class="row col-md-6">
+    @{ List<SelectListItem> states = ViewData["States"] as List<SelectListItem>; }
+    @Html.DropDownList("States_SelectedList", states)
+    <!--ideally the years must be fetched from a collection and displayed, following are placeholders for further enhancement-->
+    @Html.DropDownList("FirstYear_List", new List<SelectListItem>() { new SelectListItem() { Text = "2011" } })
+    @Html.DropDownList("SecondYear_List", new List<SelectListItem>() { new SelectListItem() { Text = "2016" } })
+</div>
+<div class="col-md-3"></div>
+<br />
+<br />
+<div id="reportPartial">
+    @Html.Partial("ReportGrid", Model)
+</div>
+
